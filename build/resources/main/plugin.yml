@@ -1,0 +1,4 @@
+name: ServiceCoreAPI
+main: net.craftergames.projects.spigot.Spigot
+version: 1.0
+author: Snickersgenascht

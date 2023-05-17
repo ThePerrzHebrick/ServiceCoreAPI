@@ -1,0 +1,83 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '7.0.0'
+}
+
+group 'net.craftergames'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/releases/"
+    }
+    maven { url 'https://repo.cloudnetservice.eu/repository/releases/' }
+    maven {
+        url 'https://repo.opencollab.dev/maven-snapshots/'
+    }
+    maven {
+        url 'https://repo.papermc.io/repository/maven-public/'
+    }
+}
+
+dependencies {
+
+    implementation group: 'com.google.inject', name: 'guice', version: '5.1.0'
+    implementation 'aopalliance:aopalliance:1.0'
+    implementation 'javax.inject:javax.inject:1'
+    implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
+    implementation group: 'org.mongodb', name: 'mongodb-driver-sync', version: '4.9.0'
+    implementation 'org.apache.commons:commons-pool2:2.11.1'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api:3.0.0'
+    implementation 'org.bspfsystems:yamlconfiguration:1.3.2'
+
+    compileOnly 'io.papermc.paper:paper-api:1.19.4-R0.1-SNAPSHOT'
+    compileOnly 'io.github.waterfallmc:waterfall-api:1.19-R0.1-SNAPSHOT'
+
+    compileOnly 'eu.cloudnetservice.cloudnet:platform-inject-api:4.0.0-RC8'
+    annotationProcessor 'eu.cloudnetservice.cloudnet:platform-inject-processor:4.0.0-RC8'
+}
+
+tasks {
+    build {
+        dependsOn shadowJar
+    }
+
+    shadowJar {
+        archiveBaseName.set 'ServiceCoreAPI'
+        archiveFileName = "C:\\Export\\ServiceCoreAPI.jar"
+        zip64 true
+        //configurations = [project.configurations.compileClasspath]
+        dependencies {
+/*            include dependency('com.google.inject::5.1.0')
+            include dependency('aopalliance::1.0')
+            include dependency('javax.inject::1')
+            include dependency('com.google.code.gson::2.10.1')
+            include dependency('org.mongodb::4.9.0')
+            include dependency('redis.clients::4.3.1')
+            include dependency('org.apache.commons::2.11.1')*/
+            relocate('com.google', 'net.craftergames.libs.google')
+            relocate('org.aopalliance', 'net.craftergames.libs.aopalliance')
+            relocate('org.bson', 'net.craftergames.libs.bson')
+            relocate('org.json', 'net.craftergames.libs.json')
+            //relocate('org.slf4j', 'net.craftergames.libs.slf4j')
+            relocate('org.checkerframework', 'net.craftergames.libs.checkerframework')
+            relocate('javax.inject', 'net.craftergames.libs.javax.inject')
+            relocate('com.google.code.gson', 'net.craftergames.libs.gson')
+            relocate('com.mongodb', 'net.craftergames.libs.mongodb')
+            relocate('redis.clients', 'net.craftergames.libs.redis')
+            relocate('org.apache.commons', 'net.craftergames.libs.commons')
+            relocate('jakarta.xml.bind', 'net.craftergames.libs.jakarta.xml.bind')
+/*            exclude dependency('io.papermc.paper:paper-api:1.19.3-R0.1-SNAPSHOT')
+            exclude dependency('io.github.waterfallmc:waterfall-api:1.19-R0.1-SNAPSHOT')*/
+        }
+        from("src/main/resources/plugin.yml")
+    }
+}
+
+
+compileJava {
+    options.encoding = 'UTF-8'
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'java'

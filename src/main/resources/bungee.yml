@@ -1,0 +1,4 @@
+name: ServiceCoreAPI
+main: net.craftergames.projects.bungeecord.Bungeecord
+version: 1.0
+author: Snickersgenascht
